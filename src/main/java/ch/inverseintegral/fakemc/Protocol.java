@@ -10,6 +10,8 @@ import ch.inverseintegral.fakemc.packets.status.StatusResponse;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.OptionalInt;
 
 /**
  * This class defines the protocol for the different handshake states.
@@ -21,24 +23,24 @@ import java.util.Map;
 public enum Protocol {
 
     HANDSHAKE {{
-        regsisterPacket(0x00, Handshake.class, Direction.CLIENT_TO_SERVER);
+        registerPacket(0x00, Handshake.class, Direction.CLIENT_TO_SERVER);
     }},
 
     // State number 1 set by the handshake packet
     STATUS {{
         // Status requests
-        regsisterPacket(0x00, StatusRequest.class, Direction.CLIENT_TO_SERVER);
-        regsisterPacket(0x00, StatusResponse.class, Direction.SERVER_TO_CLIENT);
+        registerPacket(0x00, StatusRequest.class, Direction.CLIENT_TO_SERVER);
+        registerPacket(0x00, StatusResponse.class, Direction.SERVER_TO_CLIENT);
 
         // Ping packets
-        regsisterPacket(0x01, Ping.class, Direction.CLIENT_TO_SERVER);
-        regsisterPacket(0x01, Ping.class, Direction.SERVER_TO_CLIENT);
+        registerPacket(0x01, Ping.class, Direction.CLIENT_TO_SERVER);
+        registerPacket(0x01, Ping.class, Direction.SERVER_TO_CLIENT);
     }},
 
     // State number 2 set by the handshake packet
     LOGIN {{
-       regsisterPacket(0x00, LoginRequest.class, Direction.CLIENT_TO_SERVER);
-       regsisterPacket(0x00, Kick.class, Direction.SERVER_TO_CLIENT);
+       registerPacket(0x00, LoginRequest.class, Direction.CLIENT_TO_SERVER);
+       registerPacket(0x00, Kick.class, Direction.SERVER_TO_CLIENT);
     }};
 
     /**
@@ -56,7 +58,7 @@ public enum Protocol {
      * @see ProtocolData
      * @see Direction
      */
-    protected void regsisterPacket(int id, Class<? extends Packet> packetClass, Direction direction) {
+    protected void registerPacket(int id, Class<? extends Packet> packetClass, Direction direction) {
         if (direction == Direction.CLIENT_TO_SERVER) {
             data.incoming.put(id, packetClass);
         } else {
@@ -85,7 +87,7 @@ public enum Protocol {
                 .filter(entry -> entry.getValue().equals(packetClass))
                 .map(Map.Entry::getKey)
                 .findFirst()
-                .get();
+                .orElse(null);
     }
 
     /**
@@ -96,12 +98,12 @@ public enum Protocol {
         /**
          * A map of ids and incoming packets (used for deserialization).
          */
-        protected Map<Integer, Class<? extends Packet>> incoming = new HashMap<>();
+        Map<Integer, Class<? extends Packet>> incoming = new HashMap<>();
 
         /**
          * A map of ids and outgoing packets (used for serialization).
          */
-        protected Map<Integer, Class<? extends Packet>> outgoing = new HashMap<>();
+        Map<Integer, Class<? extends Packet>> outgoing = new HashMap<>();
 
     }
 

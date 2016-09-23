@@ -30,13 +30,13 @@ public abstract class Packet {
      */
     public abstract void write(ByteBuf buf);
 
-    public static void writeString(String s, ByteBuf buf) {
+    protected static void writeString(String s, ByteBuf buf) {
         byte[] b = s.getBytes(StandardCharsets.UTF_8);
         writeVarInt(b.length, buf);
         buf.writeBytes(b);
     }
 
-    public static String readString(ByteBuf buf) {
+    protected static String readString(ByteBuf buf) {
         int len = readVarInt(buf);
 
         byte[] b = new byte[len];
@@ -54,7 +54,7 @@ public abstract class Packet {
         return readArray(buf, buf.readableBytes());
     }
 
-    public static byte[] readArray(ByteBuf buf, int limit) {
+    private static byte[] readArray(ByteBuf buf, int limit) {
         int len = readVarInt(buf);
         byte[] ret = new byte[len];
         buf.readBytes(ret);
@@ -81,7 +81,7 @@ public abstract class Packet {
         return readVarInt(input, 5);
     }
 
-    public static int readVarInt(ByteBuf input, int maxBytes) {
+    private static int readVarInt(ByteBuf input, int maxBytes) {
         int out = 0;
         int bytes = 0;
         byte in;
