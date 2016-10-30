@@ -1,13 +1,10 @@
 package ch.inverseintegral.fakemc;
 
+import ch.inverseintegral.fakemc.config.ConfigurationValues;
 import ch.inverseintegral.fakemc.handlers.MinecraftHandler;
 import ch.inverseintegral.fakemc.handlers.PacketHandler;
 import ch.inverseintegral.fakemc.handlers.Varint21FrameDecoder;
 import ch.inverseintegral.fakemc.handlers.Varint21LengthFieldPrepender;
-import ch.inverseintegral.fakemc.ping.Chat;
-import ch.inverseintegral.fakemc.ping.Players;
-import ch.inverseintegral.fakemc.ping.Version;
-import com.google.gson.Gson;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -17,12 +14,8 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.*;
-import java.nio.charset.Charset;
 import java.util.Base64;
-import java.util.Collections;
 import java.util.Properties;
 
 /**
@@ -39,8 +32,6 @@ public class FakeMC {
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
 
-        String configuration = loadConfiguration();
-
         try {
             ServerBootstrap b = new ServerBootstrap();
             b.group(bossGroup, workerGroup)
@@ -52,7 +43,7 @@ public class FakeMC {
                             ch.pipeline().addLast(new Varint21FrameDecoder(),
                                     new Varint21LengthFieldPrepender(),
                                     new MinecraftHandler(),
-                                    new PacketHandler(configuration));
+                                    new PacketHandler(loadConfiguration()));
                         }
                     })
                     .option(ChannelOption.SO_BACKLOG, 128)
@@ -69,25 +60,18 @@ public class FakeMC {
         }
     }
 
-    private static String loadConfiguration() {
-        Gson gson = new Gson();
-        Version version = new Version("1.8", 47);
-
-        Players players = null;
-        Chat chat = null;
-        String favicon = null;
+    private static ConfigurationValues loadConfiguration() {
+        ConfigurationValues values = new ConfigurationValues();
 
         // Load properties file
         try (InputStream inputStream = FakeMC.class.getClassLoader().getResourceAsStream("configuration.properties")){
             Properties properties = new Properties();
             properties.load(inputStream);
 
-            String motd = (String) properties.get("motd");
-            int currentPlayers = Integer.parseInt((String) properties.get("online_players"));
-            int maxPlayer = Integer.parseInt((String) properties.get("max_players"));
-
-            players = new Players(maxPlayer, currentPlayers, Collections.emptyList());
-            chat = new Chat(motd);
+            values.setMotd((String) properties.get("motd"));
+            values.setCurrentPlayers(Integer.valueOf((String) properties.get("online_players")));
+            values.setMaxPlayers(Integer.valueOf((String) properties.get("max_players")));
+            values.setKickMessage((String) properties.get("kick_message"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -102,12 +86,12 @@ public class FakeMC {
             reader.read(bytes, 0, length);
             reader.close();
 
-            favicon = new String(Base64.getEncoder().encode(bytes));
+            values.setFavicon(new String(Base64.getEncoder().encode(bytes)));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return gson.toJson(new ch.inverseintegral.fakemc.ping.StatusResponse(chat, players, version, favicon));
+        return values;
     }
 
 }

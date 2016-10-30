@@ -1,6 +1,7 @@
 package ch.inverseintegral.fakemc.handlers;
 
 import ch.inverseintegral.fakemc.Protocol;
+import ch.inverseintegral.fakemc.config.ConfigurationValues;
 import ch.inverseintegral.fakemc.packets.*;
 import ch.inverseintegral.fakemc.packets.handshake.Handshake;
 import ch.inverseintegral.fakemc.packets.login.Kick;
@@ -38,9 +39,16 @@ public class PacketHandler extends SimpleChannelInboundHandler<Packet> {
     private ProtocolState currentState = ProtocolState.HANDSHAKE;
 
     private String response;
+    private String kickMessage;
 
-    public PacketHandler(String response) {
-        this.response = response;
+    public PacketHandler(ConfigurationValues configurationValues) {
+        Gson gson = new Gson();
+        Version version = new Version("1.8", 47);
+        Players players = new Players(configurationValues.getMaxPlayers(), configurationValues.getCurrentPlayers(), Collections.emptyList());
+        Chat chat = new Chat(configurationValues.getMotd());
+
+        this.response = gson.toJson(new ch.inverseintegral.fakemc.ping.StatusResponse(chat, players, version, configurationValues.getFavicon()));
+        this.kickMessage = configurationValues.getKickMessage();
     }
 
     @Override
@@ -84,7 +92,7 @@ public class PacketHandler extends SimpleChannelInboundHandler<Packet> {
     private void handle(ChannelHandlerContext ctx, LoginRequest loginRequest) {
         this.checkState(ProtocolState.USERNAME);
 
-        Kick kick = new Kick(getKickData("§cThis server is under maintenance"));
+        Kick kick = new Kick(getKickData(this.kickMessage));
         ctx.channel()
                 .writeAndFlush(kick)
                 .addListener(ChannelFutureListener.CLOSE);
