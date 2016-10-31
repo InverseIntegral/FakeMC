@@ -17,6 +17,8 @@ import com.google.gson.Gson;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.security.auth.login.LoginException;
 import java.lang.reflect.Method;
@@ -31,6 +33,8 @@ import java.util.UUID;
  * @since 1.0
  */
 public class PacketHandler extends SimpleChannelInboundHandler<Packet> {
+
+    private static final Logger logger = LoggerFactory.getLogger(PacketHandler.class);
 
     /**
      * The current protocol state.
@@ -86,12 +90,15 @@ public class PacketHandler extends SimpleChannelInboundHandler<Packet> {
 
     protected void handle(ChannelHandlerContext ctx, Ping ping) {
         this.checkState(ProtocolState.PING);
+
+        logger.info("Ping received at {}", ping.getTime());
         ctx.channel().writeAndFlush(ping).addListener(ChannelFutureListener.CLOSE);
     }
 
     private void handle(ChannelHandlerContext ctx, LoginRequest loginRequest) {
         this.checkState(ProtocolState.USERNAME);
 
+        logger.info("Login from {}", loginRequest.getData());
         Kick kick = new Kick(getKickData(this.kickMessage));
         ctx.channel()
                 .writeAndFlush(kick)

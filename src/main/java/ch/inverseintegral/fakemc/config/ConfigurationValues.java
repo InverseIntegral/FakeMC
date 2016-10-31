@@ -1,10 +1,13 @@
 package ch.inverseintegral.fakemc.config;
 
+import lombok.Data;
+
 /**
  * @author Inverse Integral
  * @version 1.0
  * @since 1.0
  */
+@Data
 public class ConfigurationValues {
 
     private int currentPlayers;
@@ -14,52 +17,6 @@ public class ConfigurationValues {
     private String kickMessage;
     private int port;
 
-    public int getCurrentPlayers() {
-        return currentPlayers;
-    }
-
-    public int getMaxPlayers() {
-        return maxPlayers;
-    }
-
-    public String getMotd() {
-        return motd;
-    }
-
-    public String getFavicon() {
-        return favicon;
-    }
-
-    public String getKickMessage() {
-        return kickMessage;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public void setCurrentPlayers(int currentPlayers) {
-        this.currentPlayers = currentPlayers;
-    }
-
-    public void setMaxPlayers(int maxPlayers) {
-        this.maxPlayers = maxPlayers;
-    }
-
-    public void setMotd(String motd) {
-        this.motd = motd;
-    }
-
-    public void setFavicon(String favicon) {
-        this.favicon = favicon;
-    }
-
-    public void setKickMessage(String kickMessage) {
-        this.kickMessage = kickMessage;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
-    }
+    public ConfigurationValues() {}
 
 }

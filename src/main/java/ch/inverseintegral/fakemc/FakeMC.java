@@ -13,6 +13,8 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.Base64;
@@ -27,12 +29,15 @@ import java.util.Properties;
  */
 public class FakeMC {
 
+    private static final Logger logger = LoggerFactory.getLogger(FakeMC.class);
+
     public static void main(String[] args) {
         // Create a boss and a worker group
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
 
         ConfigurationValues values = loadConfiguration();
+        logger.info("Configuration has been loaded");
 
         try {
             ServerBootstrap b = new ServerBootstrap();
@@ -53,10 +58,13 @@ public class FakeMC {
 
             // Bind to the configured port and block until the server stops
             ChannelFuture f = b.bind(values.getPort()).sync();
+            logger.info("Server has been started");
+
             f.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
+            logger.info("Server stopping");
             workerGroup.shutdownGracefully();
             bossGroup.shutdownGracefully();
         }
