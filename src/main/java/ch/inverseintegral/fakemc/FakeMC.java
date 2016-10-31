@@ -32,6 +32,8 @@ public class FakeMC {
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
 
+        ConfigurationValues values = loadConfiguration();
+
         try {
             ServerBootstrap b = new ServerBootstrap();
             b.group(bossGroup, workerGroup)
@@ -43,14 +45,14 @@ public class FakeMC {
                             ch.pipeline().addLast(new Varint21FrameDecoder(),
                                     new Varint21LengthFieldPrepender(),
                                     new MinecraftHandler(),
-                                    new PacketHandler(loadConfiguration()));
+                                    new PacketHandler(values));
                         }
                     })
                     .option(ChannelOption.SO_BACKLOG, 128)
                     .childOption(ChannelOption.SO_KEEPALIVE, true);
 
-            // Bind to the port 25565 and block until the server stops
-            ChannelFuture f = b.bind(25565).sync();
+            // Bind to the configured port and block until the server stops
+            ChannelFuture f = b.bind(values.getPort()).sync();
             f.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -72,12 +74,15 @@ public class FakeMC {
             values.setCurrentPlayers(Integer.valueOf((String) properties.get("online_players")));
             values.setMaxPlayers(Integer.valueOf((String) properties.get("max_players")));
             values.setKickMessage((String) properties.get("kick_message"));
+            values.setPort(Integer.valueOf((String) properties.get("port")));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         // Load favicon file and encode as base64 string
-        File iconFile = new File(FakeMC.class.getClassLoader().getResource("favicon.png").getFile());
+        File iconFile = new File(FakeMC.class.getClassLoader()
+                .getResource("favicon.png")
+                .getFile());
 
         try (BufferedInputStream reader = new BufferedInputStream(new FileInputStream(iconFile))) {
             int length = (int) iconFile.length();

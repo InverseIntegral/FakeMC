@@ -12,6 +12,7 @@ public class ConfigurationValues {
     private String motd;
     private String favicon;
     private String kickMessage;
+    private int port;
 
     public int getCurrentPlayers() {
         return currentPlayers;
@@ -33,6 +34,10 @@ public class ConfigurationValues {
         return kickMessage;
     }
 
+    public int getPort() {
+        return port;
+    }
+
     public void setCurrentPlayers(int currentPlayers) {
         this.currentPlayers = currentPlayers;
     }
@@ -52,4 +57,9 @@ public class ConfigurationValues {
     public void setKickMessage(String kickMessage) {
         this.kickMessage = kickMessage;
     }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
 }
