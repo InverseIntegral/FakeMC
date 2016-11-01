@@ -23,8 +23,7 @@ public class Ping extends Packet {
     /**
      * Reflection constructor
      */
-    public Ping() {
-    }
+    public Ping() {}
 
     /**
      * {@inheritDoc}

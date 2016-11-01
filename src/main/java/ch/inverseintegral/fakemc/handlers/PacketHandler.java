@@ -2,7 +2,7 @@ package ch.inverseintegral.fakemc.handlers;
 
 import ch.inverseintegral.fakemc.Protocol;
 import ch.inverseintegral.fakemc.config.ConfigurationValues;
-import ch.inverseintegral.fakemc.packets.*;
+import ch.inverseintegral.fakemc.packets.Packet;
 import ch.inverseintegral.fakemc.packets.handshake.Handshake;
 import ch.inverseintegral.fakemc.packets.login.Kick;
 import ch.inverseintegral.fakemc.packets.login.LoginRequest;
@@ -10,7 +10,6 @@ import ch.inverseintegral.fakemc.packets.status.Ping;
 import ch.inverseintegral.fakemc.packets.status.StatusRequest;
 import ch.inverseintegral.fakemc.packets.status.StatusResponse;
 import ch.inverseintegral.fakemc.ping.Chat;
-import ch.inverseintegral.fakemc.ping.Player;
 import ch.inverseintegral.fakemc.ping.Players;
 import ch.inverseintegral.fakemc.ping.Version;
 import com.google.gson.Gson;
@@ -20,10 +19,8 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.security.auth.login.LoginException;
 import java.lang.reflect.Method;
 import java.util.Collections;
-import java.util.UUID;
 
 /**
  * Handles the specific packets that are received from the server.
@@ -63,19 +60,22 @@ public class PacketHandler extends SimpleChannelInboundHandler<Packet> {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        cause.printStackTrace();
+        logger.error("Caught a channel exception", cause);
         ctx.channel().close();
     }
 
     protected void handle(ChannelHandlerContext ctx, Handshake handshake) {
         this.checkState(ProtocolState.HANDSHAKE);
 
-        if (handshake.getRequestedProtocol() == 1) {
-            ctx.channel().pipeline().get(MinecraftHandler.class).setProtocol(Protocol.STATUS);
-            this.currentState = ProtocolState.STATUS;
-        } else if (handshake.getRequestedProtocol() == 2) {
-            ctx.channel().pipeline().get(MinecraftHandler.class).setProtocol(Protocol.LOGIN);
-            this.currentState = ProtocolState.USERNAME;
+        switch (handshake.getRequestedProtocol()) {
+            case 1:
+                ctx.channel().pipeline().get(MinecraftHandler.class).setProtocol(Protocol.STATUS);
+                this.currentState = ProtocolState.STATUS;
+                break;
+            case 2:
+                ctx.channel().pipeline().get(MinecraftHandler.class).setProtocol(Protocol.LOGIN);
+                this.currentState = ProtocolState.USERNAME;
+                break;
         }
     }
 
@@ -90,15 +90,15 @@ public class PacketHandler extends SimpleChannelInboundHandler<Packet> {
 
     protected void handle(ChannelHandlerContext ctx, Ping ping) {
         this.checkState(ProtocolState.PING);
+        logger.info("Ping received with content {}", ping.getTime());
 
-        logger.info("Ping received at {}", ping.getTime());
         ctx.channel().writeAndFlush(ping).addListener(ChannelFutureListener.CLOSE);
     }
 
     private void handle(ChannelHandlerContext ctx, LoginRequest loginRequest) {
         this.checkState(ProtocolState.USERNAME);
+        logger.info("The player {} tried to join the server", loginRequest.getData());
 
-        logger.info("Login from {}", loginRequest.getData());
         Kick kick = new Kick(getKickData(this.kickMessage));
         ctx.channel()
                 .writeAndFlush(kick)

@@ -6,6 +6,8 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageCodec;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -17,6 +19,8 @@ import java.util.List;
  * @since 1.0
  */
 public class MinecraftHandler extends MessageToMessageCodec<ByteBuf, Packet> {
+
+    private static final Logger logger = LoggerFactory.getLogger(MinecraftHandler.class);
 
     /**
      * The current protocol that is used for encoding and decoding the packets.
@@ -36,7 +40,7 @@ public class MinecraftHandler extends MessageToMessageCodec<ByteBuf, Packet> {
         Class<?> packetClass = protocol.getClassById(packetId);
 
         if (packetClass == null) {
-            System.out.println(packetId + " is an unknown packet");
+            logger.warn("Unknown packet with id {} received", packetId);
             in.skipBytes(in.readableBytes());
             return;
         }
@@ -63,7 +67,7 @@ public class MinecraftHandler extends MessageToMessageCodec<ByteBuf, Packet> {
         out.add(buf);
     }
 
-    public void setProtocol(Protocol protocol) {
+    void setProtocol(Protocol protocol) {
         this.protocol = protocol;
     }
 

@@ -18,3 +18,4 @@ This server implementation handles specific minecraft packets (handshake, ping e
 ## Credits
 * [@michidk](https://github.com/michidk) implemented a similar version of this project but without Netty. [FakeMCServer](https://github.com/michidk/FakeMCServer)
 * I took the protocol information from [this](http://wiki.vg/Protocol) wiki.
+* The Varint21 decoder and encoder classes have been taken from [BungeeCord](https://github.com/SpigotMC/BungeeCord).

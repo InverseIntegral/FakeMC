@@ -9,7 +9,7 @@ import io.netty.handler.codec.MessageToByteEncoder;
 /**
  * Prepends the length of the packet to the encoded message.
  *
- * @author Inverse Integral
+ * @author md-5
  * @version 1.0
  * @since 1.0
  */
@@ -41,15 +41,19 @@ public class Varint21LengthFieldPrepender extends MessageToByteEncoder<ByteBuf> 
         if ((paramInt & 0xFFFFFF80) == 0) {
             return 1;
         }
+
         if ((paramInt & 0xFFFFC000) == 0) {
             return 2;
         }
+
         if ((paramInt & 0xFFE00000) == 0) {
             return 3;
         }
+
         if ((paramInt & 0xF0000000) == 0) {
             return 4;
         }
+
         return 5;
     }
 }

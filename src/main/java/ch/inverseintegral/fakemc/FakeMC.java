@@ -62,7 +62,7 @@ public class FakeMC {
 
             f.channel().closeFuture().sync();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            logger.error("Caught exception whilst waiting for server to bind to port", e);
         } finally {
             logger.info("Server stopping");
             workerGroup.shutdownGracefully();
@@ -84,7 +84,7 @@ public class FakeMC {
             values.setKickMessage((String) properties.get("kick_message"));
             values.setPort(Integer.valueOf((String) properties.get("port")));
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Unable to read configuration file", e);
         }
 
         // Load favicon file and encode as base64 string
@@ -101,7 +101,7 @@ public class FakeMC {
 
             values.setFavicon(new String(Base64.getEncoder().encode(bytes)));
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Unable to read favicon.png", e);
         }
 
         return values;

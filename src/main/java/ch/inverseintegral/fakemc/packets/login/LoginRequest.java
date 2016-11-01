@@ -22,8 +22,7 @@ public class LoginRequest extends Packet {
     /**
      * Reflection constructor
      */
-    public LoginRequest() {
-    }
+    public LoginRequest() {}
 
     /**
      * {@inheritDoc}

@@ -23,8 +23,7 @@ public class Handshake extends Packet {
     /**
      * Reflection constructor
      */
-    public Handshake() {
-    }
+    public Handshake() {}
 
     @Override
     public void read(ByteBuf buf) {
