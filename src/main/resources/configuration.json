@@ -1,0 +1,7 @@
+{
+    "motd": "§4Test §7Server\n§cHello World",
+    "onlinePlayers": 12,
+    "maxPlayers": 200,
+    "kickMessage": "§4The server is under maintenance",
+    "port": 25565
+}

@@ -5,6 +5,7 @@ import ch.inverseintegral.fakemc.handlers.MinecraftHandler;
 import ch.inverseintegral.fakemc.handlers.PacketHandler;
 import ch.inverseintegral.fakemc.handlers.Varint21FrameDecoder;
 import ch.inverseintegral.fakemc.handlers.Varint21LengthFieldPrepender;
+import com.google.gson.Gson;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -17,8 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.net.URL;
 import java.util.Base64;
-import java.util.Properties;
 
 /**
  * This class creates a new fake minecraft server.
@@ -36,10 +37,11 @@ public class FakeMC {
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
 
-        ConfigurationValues values = loadConfiguration();
-        logger.info("Configuration has been loaded");
-
         try {
+            ConfigurationValues values = loadConfiguration();
+            String favicon = loadFavicon();
+            logger.info("Configuration has been loaded");
+
             ServerBootstrap b = new ServerBootstrap();
             b.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
@@ -50,7 +52,7 @@ public class FakeMC {
                             ch.pipeline().addLast(new Varint21FrameDecoder(),
                                     new Varint21LengthFieldPrepender(),
                                     new MinecraftHandler(),
-                                    new PacketHandler(values));
+                                    new PacketHandler(favicon, values));
                         }
                     })
                     .option(ChannelOption.SO_BACKLOG, 128)
@@ -63,34 +65,35 @@ public class FakeMC {
             f.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             logger.error("Caught exception whilst waiting for server to bind to port", e);
+        } catch (FileNotFoundException e) {
+            logger.error("Unable to locate configuration/favicon file", e);
+        } catch (IOException e) {
+            logger.error("IO Exception whilst loading configuration file/favicon", e);
         } finally {
             logger.info("Server stopping");
+
             workerGroup.shutdownGracefully();
             bossGroup.shutdownGracefully();
         }
     }
 
-    private static ConfigurationValues loadConfiguration() {
-        ConfigurationValues values = new ConfigurationValues();
+    private static ConfigurationValues loadConfiguration() throws IOException {
+        StringBuilder content = new StringBuilder();
 
-        // Load properties file
-        try (InputStream inputStream = FakeMC.class.getClassLoader().getResourceAsStream("configuration.properties")){
-            Properties properties = new Properties();
-            properties.load(inputStream);
+        try (FileInputStream inputStream = new FileInputStream(checkResource("configuration.json").getFile())){
+            int value;
 
-            values.setMotd((String) properties.get("motd"));
-            values.setCurrentPlayers(Integer.valueOf((String) properties.get("online_players")));
-            values.setMaxPlayers(Integer.valueOf((String) properties.get("max_players")));
-            values.setKickMessage((String) properties.get("kick_message"));
-            values.setPort(Integer.valueOf((String) properties.get("port")));
-        } catch (IOException e) {
-            logger.error("Unable to read configuration file", e);
+            while ((value = inputStream.read()) != -1) {
+                content.append((char) value);
+            }
         }
 
-        // Load favicon file and encode as base64 string
-        File iconFile = new File(FakeMC.class.getClassLoader()
-                .getResource("favicon.png")
-                .getFile());
+        Gson gson = new Gson();
+        return gson.fromJson(content.toString(), ConfigurationValues.class);
+    }
+
+    private static String loadFavicon() throws IOException {
+        File iconFile = new File(checkResource("favicon.png").getFile());
 
         try (BufferedInputStream reader = new BufferedInputStream(new FileInputStream(iconFile))) {
             int length = (int) iconFile.length();
@@ -99,12 +102,19 @@ public class FakeMC {
             reader.read(bytes, 0, length);
             reader.close();
 
-            values.setFavicon(new String(Base64.getEncoder().encode(bytes)));
-        } catch (IOException e) {
-            logger.error("Unable to read favicon.png", e);
+            return new String(Base64.getEncoder().encode(bytes));
+        }
+    }
+
+    private static URL checkResource(String resource) throws FileNotFoundException {
+        ClassLoader classLoader = FakeMC.class.getClassLoader();
+        URL resourceURL = classLoader.getResource(resource);
+
+        if (resourceURL == null) {
+            throw new FileNotFoundException("Unable to find favicon.png");
         }
 
-        return values;
+        return resourceURL;
     }
 
 }

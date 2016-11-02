@@ -42,13 +42,13 @@ public class PacketHandler extends SimpleChannelInboundHandler<Packet> {
     private String response;
     private String kickMessage;
 
-    public PacketHandler(ConfigurationValues configurationValues) {
+    public PacketHandler(String favicon, ConfigurationValues configurationValues) {
         Gson gson = new Gson();
         Version version = new Version("1.8", 47);
         Players players = new Players(configurationValues.getMaxPlayers(), configurationValues.getCurrentPlayers(), Collections.emptyList());
         Chat chat = new Chat(configurationValues.getMotd());
 
-        this.response = gson.toJson(new ch.inverseintegral.fakemc.ping.StatusResponse(chat, players, version, configurationValues.getFavicon()));
+        this.response = gson.toJson(new ch.inverseintegral.fakemc.ping.StatusResponse(chat, players, version, favicon));
         this.kickMessage = configurationValues.getKickMessage();
     }
 

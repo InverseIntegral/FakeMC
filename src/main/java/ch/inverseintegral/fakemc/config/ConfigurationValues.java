@@ -13,7 +13,6 @@ public class ConfigurationValues {
     private int currentPlayers;
     private int maxPlayers;
     private String motd;
-    private String favicon;
     private String kickMessage;
     private int port;
 
