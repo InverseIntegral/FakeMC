@@ -66,12 +66,10 @@ public class FakeMC {
         } catch (InterruptedException e) {
             logger.error("Caught exception whilst waiting for server to bind to port", e);
         } catch (FileNotFoundException e) {
-            logger.error("Unable to locate configuration/favicon file", e);
+            logger.error("Unable to locate a configuration file", e);
         } catch (IOException e) {
-            logger.error("IO Exception whilst loading configuration file/favicon", e);
+            logger.error("IO Exception whilst loading configurations", e);
         } finally {
-            logger.info("Server stopping");
-
             workerGroup.shutdownGracefully();
             bossGroup.shutdownGracefully();
         }
@@ -80,7 +78,7 @@ public class FakeMC {
     private static ConfigurationValues loadConfiguration() throws IOException {
         StringBuilder content = new StringBuilder();
 
-        try (FileInputStream inputStream = new FileInputStream(checkResource("configuration.json").getFile())){
+        try (FileInputStream inputStream = new FileInputStream(getResourceFile("configuration.json"))){
             int value;
 
             while ((value = inputStream.read()) != -1) {
@@ -93,7 +91,7 @@ public class FakeMC {
     }
 
     private static String loadFavicon() throws IOException {
-        File iconFile = new File(checkResource("favicon.png").getFile());
+        File iconFile = new File(getResourceFile("favicon.png"));
 
         try (BufferedInputStream reader = new BufferedInputStream(new FileInputStream(iconFile))) {
             int length = (int) iconFile.length();
@@ -106,15 +104,15 @@ public class FakeMC {
         }
     }
 
-    private static URL checkResource(String resource) throws FileNotFoundException {
+    private static String getResourceFile(String resource) throws FileNotFoundException {
         ClassLoader classLoader = FakeMC.class.getClassLoader();
         URL resourceURL = classLoader.getResource(resource);
 
         if (resourceURL == null) {
-            throw new FileNotFoundException("Unable to find favicon.png");
+            throw new FileNotFoundException(resource + " file not found");
         }
 
-        return resourceURL;
+        return resourceURL.getFile();
     }
 
 }
