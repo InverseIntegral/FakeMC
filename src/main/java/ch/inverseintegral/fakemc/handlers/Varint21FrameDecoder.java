@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Reads the length of the packet from the byte buffer.
  *
- * @author md-5, InverseIntegral
+ * @author md-5
  * @version 1.0
  * @since 1.0
  */

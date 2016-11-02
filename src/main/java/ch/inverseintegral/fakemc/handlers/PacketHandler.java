@@ -25,7 +25,7 @@ import java.util.Collections;
 /**
  * Handles the specific packets that are received from the server.
  *
- * @author Inverse Integral
+ * @author md-5, Inverse Integral
  * @version 1.0
  * @since 1.0
  */
