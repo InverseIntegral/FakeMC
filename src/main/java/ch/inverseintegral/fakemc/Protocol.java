@@ -16,7 +16,8 @@ import java.util.OptionalInt;
 /**
  * This class defines the protocol for the different handshake states.
  *
- * @author md-5, Inverse Integral
+ * @author md-5
+ * @author Inverse Integral
  * @version 1.0
  * @since 1.0
  */

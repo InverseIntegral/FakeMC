@@ -7,7 +7,8 @@ import java.nio.charset.StandardCharsets;
 /**
  * An abstract super class for packets.
  *
- * @author md-5, Inverse Integral
+ * @author md-5
+ * @author Inverse Integral
  * @version 1.0
  * @since 1.0
  */
