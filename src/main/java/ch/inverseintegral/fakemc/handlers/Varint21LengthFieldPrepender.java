@@ -2,7 +2,6 @@ package ch.inverseintegral.fakemc.handlers;
 
 import ch.inverseintegral.fakemc.packets.Packet;
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 
@@ -13,7 +12,6 @@ import io.netty.handler.codec.MessageToByteEncoder;
  * @version 1.0
  * @since 1.0
  */
-@ChannelHandler.Sharable
 public class Varint21LengthFieldPrepender extends MessageToByteEncoder<ByteBuf> {
 
     @Override

@@ -1,25 +1,15 @@
 package ch.inverseintegral.fakemc;
 
-import ch.inverseintegral.fakemc.config.ConfigurationValues;
-import ch.inverseintegral.fakemc.handlers.MinecraftHandler;
-import ch.inverseintegral.fakemc.handlers.PacketHandler;
-import ch.inverseintegral.fakemc.handlers.Varint21FrameDecoder;
-import ch.inverseintegral.fakemc.handlers.Varint21LengthFieldPrepender;
-import com.google.gson.Gson;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.*;
-import java.net.URL;
-import java.util.Base64;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
 
 /**
  * This class creates a new fake minecraft server.
@@ -28,91 +18,40 @@ import java.util.Base64;
  * @version 1.0
  * @since 1.0
  */
+@SpringBootApplication
 public class FakeMC {
 
-    private static final Logger logger = LoggerFactory.getLogger(FakeMC.class);
+    @Autowired
+    private ch.inverseintegral.fakemc.ChannelInitializer channelInitializer;
 
-    public static void main(String[] args) {
-        // Create a boss and a worker group
-        EventLoopGroup bossGroup = new NioEventLoopGroup();
-        EventLoopGroup workerGroup = new NioEventLoopGroup();
-
-        try {
-            ConfigurationValues values = loadConfiguration();
-            String favicon = loadFavicon();
-            logger.info("Configuration has been loaded");
-
-            ServerBootstrap b = new ServerBootstrap();
-            b.group(bossGroup, workerGroup)
-                    .channel(NioServerSocketChannel.class)
-                    .childHandler(new ChannelInitializer<SocketChannel>() {
-                        @Override
-                        public void initChannel(SocketChannel ch) throws Exception {
-                            // Initialize the channel pipeline
-                            ch.pipeline().addLast(new Varint21FrameDecoder(),
-                                    new Varint21LengthFieldPrepender(),
-                                    new MinecraftHandler(),
-                                    new PacketHandler(favicon, values));
-                        }
-                    })
-                    .option(ChannelOption.SO_BACKLOG, 128)
-                    .childOption(ChannelOption.SO_KEEPALIVE, true);
-
-            // Bind to the configured port and block until the server stops
-            ChannelFuture f = b.bind(values.getPort()).sync();
-            logger.info("Server has been started");
-
-            f.channel().closeFuture().sync();
-        } catch (InterruptedException e) {
-            logger.error("Caught exception whilst waiting for server to bind to port", e);
-        } catch (FileNotFoundException e) {
-            logger.error("Unable to locate a configuration file", e);
-        } catch (IOException e) {
-            logger.error("IO Exception whilst loading configurations", e);
-        } finally {
-            workerGroup.shutdownGracefully();
-            bossGroup.shutdownGracefully();
-        }
+    public static void main(String[] args) throws InterruptedException {
+        ConfigurableApplicationContext context = SpringApplication.run(FakeMC.class, args);
+        context.getBean(FakeMCServer.class).start();
     }
 
-    private static ConfigurationValues loadConfiguration() throws IOException {
-        StringBuilder content = new StringBuilder();
+    @Bean
+    public ServerBootstrap serverBootstrap() {
+        EventLoopGroup bossGroup = bossGroup();
+        EventLoopGroup workerGroup = workerGroup();
 
-        try (FileInputStream inputStream = new FileInputStream(getResourceFile("configuration.json"))){
-            int value;
+        ServerBootstrap serverBootstrap = new ServerBootstrap();
+        serverBootstrap.group(bossGroup, workerGroup)
+                .channel(NioServerSocketChannel.class)
+                .childHandler(channelInitializer)
+                .option(ChannelOption.SO_BACKLOG, 128)
+                .childOption(ChannelOption.SO_KEEPALIVE, true);
 
-            while ((value = inputStream.read()) != -1) {
-                content.append((char) value);
-            }
-        }
-
-        Gson gson = new Gson();
-        return gson.fromJson(content.toString(), ConfigurationValues.class);
+        return serverBootstrap;
     }
 
-    private static String loadFavicon() throws IOException {
-        File iconFile = new File(getResourceFile("favicon.png"));
-
-        try (BufferedInputStream reader = new BufferedInputStream(new FileInputStream(iconFile))) {
-            int length = (int) iconFile.length();
-            byte[] bytes = new byte[length];
-
-            reader.read(bytes, 0, length);
-            reader.close();
-
-            return new String(Base64.getEncoder().encode(bytes));
-        }
+    @Bean(destroyMethod = "shutdownGracefully")
+    public EventLoopGroup bossGroup() {
+        return new NioEventLoopGroup();
     }
 
-    private static String getResourceFile(String resource) throws FileNotFoundException {
-        ClassLoader classLoader = FakeMC.class.getClassLoader();
-        URL resourceURL = classLoader.getResource(resource);
-
-        if (resourceURL == null) {
-            throw new FileNotFoundException(resource + " file not found");
-        }
-
-        return resourceURL.getFile();
+    @Bean(destroyMethod = "shutdownGracefully")
+    public EventLoopGroup workerGroup() {
+        return new NioEventLoopGroup();
     }
 
 }

@@ -25,7 +25,8 @@ import java.util.Collections;
 /**
  * Handles the specific packets that are received from the server.
  *
- * @author md-5, Inverse Integral
+ * @author md-5
+ * @author Inverse Integral
  * @version 1.0
  * @since 1.0
  */
@@ -42,13 +43,13 @@ public class PacketHandler extends SimpleChannelInboundHandler<Packet> {
     private String response;
     private String kickMessage;
 
-    public PacketHandler(String favicon, ConfigurationValues configurationValues) {
+    public PacketHandler(ConfigurationValues configurationValues) {
         Gson gson = new Gson();
         Version version = new Version("1.8", 47);
         Players players = new Players(configurationValues.getMaxPlayers(), configurationValues.getCurrentPlayers(), Collections.emptyList());
         Chat chat = new Chat(configurationValues.getMotd());
 
-        this.response = gson.toJson(new ch.inverseintegral.fakemc.ping.StatusResponse(chat, players, version, favicon));
+        this.response = gson.toJson(new ch.inverseintegral.fakemc.ping.StatusResponse(chat, players, version, ""));
         this.kickMessage = configurationValues.getKickMessage();
     }
 
