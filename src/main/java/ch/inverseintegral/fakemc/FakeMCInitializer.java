@@ -10,26 +10,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
+ * Initializes the channel pipeline by adding channel handlers to it.
+ * Most handlers are not {@link io.netty.channel.ChannelHandler.Sharable sharable}
+ * therefore they are not {@link Autowired autowired}.
+ *
  * @author Inverse Integral
  * @version 1.0
  * @since 1.0
  */
 @Component
-class ChannelInitializer extends io.netty.channel.ChannelInitializer<SocketChannel> {
+class FakeMCInitializer extends io.netty.channel.ChannelInitializer<SocketChannel> {
+
+    @Autowired
+    private Varint21LengthFieldPrepender fieldPrepender;
 
     @Autowired
     private ConfigurationValues configurationValues;
 
+    @Autowired
+    private String favicon;
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void initChannel(SocketChannel socketChannel) throws Exception {
-
-        System.out.println(configurationValues.getKickMessage());
-
-        // Initialize the channel pipeline
         socketChannel.pipeline().addLast(new Varint21FrameDecoder(),
-                new Varint21LengthFieldPrepender(),
+                fieldPrepender,
                 new MinecraftHandler(),
-                new PacketHandler(configurationValues));
+                new PacketHandler(configurationValues, favicon));
 
     }
 

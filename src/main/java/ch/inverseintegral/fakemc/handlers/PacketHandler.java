@@ -8,9 +8,9 @@ import ch.inverseintegral.fakemc.packets.login.Kick;
 import ch.inverseintegral.fakemc.packets.login.LoginRequest;
 import ch.inverseintegral.fakemc.packets.status.Ping;
 import ch.inverseintegral.fakemc.packets.status.StatusRequest;
-import ch.inverseintegral.fakemc.packets.status.StatusResponse;
 import ch.inverseintegral.fakemc.ping.Chat;
 import ch.inverseintegral.fakemc.ping.Players;
+import ch.inverseintegral.fakemc.ping.StatusResponse;
 import ch.inverseintegral.fakemc.ping.Version;
 import com.google.gson.Gson;
 import io.netty.channel.ChannelFutureListener;
@@ -20,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
-import java.util.Collections;
 
 /**
  * Handles the specific packets that are received from the server.
@@ -40,16 +39,15 @@ public class PacketHandler extends SimpleChannelInboundHandler<Packet> {
      */
     private ProtocolState currentState = ProtocolState.HANDSHAKE;
 
-    private String response;
-    private String kickMessage;
+    private final String response;
+    private final String kickMessage;
 
-    public PacketHandler(ConfigurationValues configurationValues) {
+    public PacketHandler(ConfigurationValues configurationValues, String favicon) {
         Gson gson = new Gson();
-        Version version = new Version("1.8", 47);
-        Players players = new Players(configurationValues.getMaxPlayers(), configurationValues.getCurrentPlayers(), Collections.emptyList());
+        Players players = new Players(configurationValues.getMaxPlayers(), configurationValues.getCurrentPlayers());
         Chat chat = new Chat(configurationValues.getMotd());
 
-        this.response = gson.toJson(new ch.inverseintegral.fakemc.ping.StatusResponse(chat, players, version, ""));
+        this.response = gson.toJson(new StatusResponse(chat, players, Version.V_1_8, favicon));
         this.kickMessage = configurationValues.getKickMessage();
     }
 
@@ -83,9 +81,7 @@ public class PacketHandler extends SimpleChannelInboundHandler<Packet> {
     protected void handle(ChannelHandlerContext ctx, StatusRequest statusRequest) {
         this.checkState(ProtocolState.STATUS);
 
-        StatusResponse statusResponse = new StatusResponse(response);
-        ctx.channel().writeAndFlush(statusResponse);
-
+        ctx.channel().writeAndFlush(new ch.inverseintegral.fakemc.packets.status.StatusResponse(response));
         this.currentState = ProtocolState.PING;
     }
 

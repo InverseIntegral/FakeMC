@@ -2,6 +2,7 @@ package ch.inverseintegral.fakemc.ping;
 
 import lombok.Data;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -31,4 +32,9 @@ public class Players {
      */
     private final List<Player> sample;
 
+    public Players(int max, int online) {
+        this.max = max;
+        this.online = online;
+        this.sample = Collections.emptyList();
+    }
 }

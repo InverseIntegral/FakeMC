@@ -5,6 +5,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 /**
+ * Holds the configured server values.
+ *
  * @author Inverse Integral
  * @version 1.0
  * @since 1.0

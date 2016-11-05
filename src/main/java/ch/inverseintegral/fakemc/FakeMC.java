@@ -12,7 +12,9 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 
 /**
- * This class creates a new fake minecraft server.
+ * This class is the entry point of the application.
+ * It does configure some netty objects and invokes the server
+ * {@link FakeMCServer#start() start}.
  *
  * @author Inverse Integral
  * @version 1.0
@@ -22,7 +24,7 @@ import org.springframework.context.annotation.Bean;
 public class FakeMC {
 
     @Autowired
-    private ch.inverseintegral.fakemc.ChannelInitializer channelInitializer;
+    private ch.inverseintegral.fakemc.FakeMCInitializer channelInitializer;
 
     public static void main(String[] args) throws InterruptedException {
         ConfigurableApplicationContext context = SpringApplication.run(FakeMC.class, args);

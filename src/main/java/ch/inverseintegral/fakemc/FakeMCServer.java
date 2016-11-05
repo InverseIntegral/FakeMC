@@ -1,5 +1,6 @@
 package ch.inverseintegral.fakemc;
 
+import ch.inverseintegral.fakemc.config.ConfigurationValues;
 import io.netty.bootstrap.ServerBootstrap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,8 +16,15 @@ class FakeMCServer {
     @Autowired
     private ServerBootstrap serverBootstrap;
 
+    @Autowired
+    private ConfigurationValues configurationValues;
+
+    /**
+     * Starts the netty server on the given port.
+     * @throws InterruptedException
+     */
     void start() throws InterruptedException {
-        serverBootstrap.bind(25565)
+        serverBootstrap.bind(configurationValues.getPort())
                 .sync()
                 .channel()
                 .closeFuture()
