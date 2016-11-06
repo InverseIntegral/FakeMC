@@ -21,5 +21,6 @@ public class ConfigurationValues {
     private String motd;
     private String kickMessage;
     private int port;
+    private String favicon;
 
 }

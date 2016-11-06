@@ -1,6 +1,7 @@
 package ch.inverseintegral.fakemc.config;
 
 import ch.inverseintegral.fakemc.FakeMC;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -16,9 +17,12 @@ import java.util.Base64;
 @Configuration
 public class FaviconIcon {
 
+    @Autowired
+    private ConfigurationValues configuration;
+
     @Bean
     public String favicon() throws IOException {
-        File iconFile = new File(getResourceFile("icon.png"));
+        File iconFile = new File(getResourceFile(configuration.getFavicon()));
 
         try (BufferedInputStream reader = new BufferedInputStream(new FileInputStream(iconFile))) {
             int length = (int) iconFile.length();
