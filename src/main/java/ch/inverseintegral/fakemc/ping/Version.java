@@ -16,4 +16,6 @@ public class Version {
     private final String name;
     private final int protocol;
 
+    public static final Version V_1_8 = new Version("1.8", 47);
+
 }
