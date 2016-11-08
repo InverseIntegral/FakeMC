@@ -1,6 +1,6 @@
-package ch.inverseintegral.fakemc.packets.login;
+package ch.inverseintegral.fakemc.server.packets.login;
 
-import ch.inverseintegral.fakemc.packets.Packet;
+import ch.inverseintegral.fakemc.server.packets.Packet;
 import io.netty.buffer.ByteBuf;
 import lombok.Data;
 

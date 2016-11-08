@@ -1,6 +1,6 @@
-package ch.inverseintegral.fakemc.packets.handshake;
+package ch.inverseintegral.fakemc.server.packets.handshake;
 
-import ch.inverseintegral.fakemc.packets.Packet;
+import ch.inverseintegral.fakemc.server.packets.Packet;
 import io.netty.buffer.ByteBuf;
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package ch.inverseintegral.fakemc.packets;
+package ch.inverseintegral.fakemc.server.packets;
 
 import io.netty.buffer.ByteBuf;
 

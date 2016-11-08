@@ -1,7 +1,7 @@
-package ch.inverseintegral.fakemc.handlers;
+package ch.inverseintegral.fakemc.server.handlers;
 
-import ch.inverseintegral.fakemc.Protocol;
-import ch.inverseintegral.fakemc.packets.Packet;
+import ch.inverseintegral.fakemc.server.Protocol;
+import ch.inverseintegral.fakemc.server.packets.Packet;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;

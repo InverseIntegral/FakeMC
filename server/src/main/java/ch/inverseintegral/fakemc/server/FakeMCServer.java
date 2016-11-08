@@ -1,34 +1,41 @@
-package ch.inverseintegral.fakemc;
+package ch.inverseintegral.fakemc.server;
 
+import ch.inverseintegral.fakemc.server.config.ConfigurationValues;
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
 /**
- * This class is the entry point of the application.
- * It does configure some netty objects and invokes the server
- * {@link FakeMCServer#start() start}.
- *
  * @author Inverse Integral
  * @version 1.0
  * @since 1.0
  */
-@SpringBootApplication
-public class FakeMC {
+@Component
+public class FakeMCServer {
 
     @Autowired
-    private ch.inverseintegral.fakemc.FakeMCInitializer channelInitializer;
+    private ChannelInitializer<SocketChannel> channelInitializer;
 
-    public static void main(String[] args) throws InterruptedException {
-        ConfigurableApplicationContext context = SpringApplication.run(FakeMC.class, args);
-        context.getBean(FakeMCServer.class).start();
+    @Autowired
+    private ConfigurationValues configurationValues;
+
+    /**
+     * Starts the netty server on the given port.
+     * @throws InterruptedException
+     */
+    public void start() throws InterruptedException {
+        serverBootstrap().bind(configurationValues.getPort())
+                .sync()
+                .channel()
+                .closeFuture()
+                .sync();
     }
 
     @Bean

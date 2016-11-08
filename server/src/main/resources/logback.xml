@@ -5,7 +5,7 @@
         </encoder>
     </appender>
 
-    <logger name="ch.inverseintegral" level="INFO"></logger>
+    <logger name="ch.inverseintegral.fakemc" level="INFO"></logger>
 
     <root level="INFO">
         <appender-ref ref="STDOUT" />

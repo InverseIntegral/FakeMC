@@ -1,4 +1,4 @@
-package ch.inverseintegral.fakemc.ping;
+package ch.inverseintegral.fakemc.server.ping;
 
 import lombok.Data;
 
@@ -9,7 +9,7 @@ import lombok.Data;
  * @author Inverse Integral
  * @version 1.0
  * @since 1.0
- * @see ch.inverseintegral.fakemc.packets.login.Kick
+ * @see ch.inverseintegral.fakemc.server.packets.login.Kick
  * @see StatusResponse
  */
 @Data

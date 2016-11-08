@@ -1,10 +1,11 @@
-package ch.inverseintegral.fakemc;
+package ch.inverseintegral.fakemc.server;
 
-import ch.inverseintegral.fakemc.config.ConfigurationValues;
-import ch.inverseintegral.fakemc.handlers.MinecraftHandler;
-import ch.inverseintegral.fakemc.handlers.PacketHandler;
-import ch.inverseintegral.fakemc.handlers.Varint21FrameDecoder;
-import ch.inverseintegral.fakemc.handlers.Varint21LengthFieldPrepender;
+import ch.inverseintegral.fakemc.server.config.ConfigurationValues;
+import ch.inverseintegral.fakemc.server.handlers.MinecraftHandler;
+import ch.inverseintegral.fakemc.server.handlers.PacketHandler;
+import ch.inverseintegral.fakemc.server.handlers.Varint21FrameDecoder;
+import ch.inverseintegral.fakemc.server.handlers.Varint21LengthFieldPrepender;
+import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,7 @@ import org.springframework.stereotype.Component;
  * @since 1.0
  */
 @Component
-class FakeMCInitializer extends io.netty.channel.ChannelInitializer<SocketChannel> {
+class FakeMCInitializer extends ChannelInitializer<SocketChannel> {
 
     @Autowired
     private Varint21LengthFieldPrepender fieldPrepender;

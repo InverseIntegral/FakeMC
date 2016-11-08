@@ -1,4 +1,4 @@
-package ch.inverseintegral.fakemc.ping;
+package ch.inverseintegral.fakemc.server.ping;
 
 import lombok.Data;
 

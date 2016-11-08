@@ -1,17 +1,15 @@
-package ch.inverseintegral.fakemc;
+package ch.inverseintegral.fakemc.server;
 
-import ch.inverseintegral.fakemc.packets.*;
-import ch.inverseintegral.fakemc.packets.handshake.Handshake;
-import ch.inverseintegral.fakemc.packets.login.Kick;
-import ch.inverseintegral.fakemc.packets.login.LoginRequest;
-import ch.inverseintegral.fakemc.packets.status.Ping;
-import ch.inverseintegral.fakemc.packets.status.StatusRequest;
-import ch.inverseintegral.fakemc.packets.status.StatusResponse;
+import ch.inverseintegral.fakemc.server.packets.*;
+import ch.inverseintegral.fakemc.server.packets.handshake.Handshake;
+import ch.inverseintegral.fakemc.server.packets.login.Kick;
+import ch.inverseintegral.fakemc.server.packets.login.LoginRequest;
+import ch.inverseintegral.fakemc.server.packets.status.Ping;
+import ch.inverseintegral.fakemc.server.packets.status.StatusRequest;
+import ch.inverseintegral.fakemc.server.packets.status.StatusResponse;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
-import java.util.OptionalInt;
 
 /**
  * This class defines the protocol for the different handshake states.

@@ -1,6 +1,6 @@
-package ch.inverseintegral.fakemc.packets.login;
+package ch.inverseintegral.fakemc.server.packets.login;
 
-import ch.inverseintegral.fakemc.packets.Packet;
+import ch.inverseintegral.fakemc.server.packets.Packet;
 import io.netty.buffer.ByteBuf;
 import lombok.Data;
 
@@ -15,7 +15,7 @@ import lombok.Data;
 public class Kick extends Packet {
 
     /**
-     * The kick message in this {@link ch.inverseintegral.fakemc.ping.Chat json format}.
+     * The kick message in this {@link ch.inverseintegral.fakemc.server.ping.Chat json format}.
      */
     private final String message;
 

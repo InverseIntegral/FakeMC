@@ -1,6 +1,5 @@
-package ch.inverseintegral.fakemc.config;
+package ch.inverseintegral.fakemc.server.config;
 
-import ch.inverseintegral.fakemc.FakeMC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +14,7 @@ import java.util.Base64;
  * @since 1.0
  */
 @Configuration
-public class FaviconIcon {
+class FaviconIcon {
 
     @Autowired
     private ConfigurationValues configuration;
@@ -39,7 +38,7 @@ public class FaviconIcon {
     }
 
     private String getResourceFile(String resource) throws FileNotFoundException {
-        ClassLoader classLoader = FakeMC.class.getClassLoader();
+        ClassLoader classLoader = FaviconIcon.class.getClassLoader();
         URL resourceURL = classLoader.getResource(resource);
 
         if (resourceURL == null) {

@@ -1,17 +1,17 @@
-package ch.inverseintegral.fakemc.handlers;
+package ch.inverseintegral.fakemc.server.handlers;
 
-import ch.inverseintegral.fakemc.Protocol;
-import ch.inverseintegral.fakemc.config.ConfigurationValues;
-import ch.inverseintegral.fakemc.packets.Packet;
-import ch.inverseintegral.fakemc.packets.handshake.Handshake;
-import ch.inverseintegral.fakemc.packets.login.Kick;
-import ch.inverseintegral.fakemc.packets.login.LoginRequest;
-import ch.inverseintegral.fakemc.packets.status.Ping;
-import ch.inverseintegral.fakemc.packets.status.StatusRequest;
-import ch.inverseintegral.fakemc.ping.Chat;
-import ch.inverseintegral.fakemc.ping.Players;
-import ch.inverseintegral.fakemc.ping.StatusResponse;
-import ch.inverseintegral.fakemc.ping.Version;
+import ch.inverseintegral.fakemc.server.Protocol;
+import ch.inverseintegral.fakemc.server.config.ConfigurationValues;
+import ch.inverseintegral.fakemc.server.packets.Packet;
+import ch.inverseintegral.fakemc.server.packets.handshake.Handshake;
+import ch.inverseintegral.fakemc.server.packets.login.Kick;
+import ch.inverseintegral.fakemc.server.packets.login.LoginRequest;
+import ch.inverseintegral.fakemc.server.packets.status.Ping;
+import ch.inverseintegral.fakemc.server.packets.status.StatusRequest;
+import ch.inverseintegral.fakemc.server.ping.Chat;
+import ch.inverseintegral.fakemc.server.ping.Players;
+import ch.inverseintegral.fakemc.server.ping.StatusResponse;
+import ch.inverseintegral.fakemc.server.ping.Version;
 import com.google.gson.Gson;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
@@ -81,7 +81,7 @@ public class PacketHandler extends SimpleChannelInboundHandler<Packet> {
     protected void handle(ChannelHandlerContext ctx, StatusRequest statusRequest) {
         this.checkState(ProtocolState.STATUS);
 
-        ctx.channel().writeAndFlush(new ch.inverseintegral.fakemc.packets.status.StatusResponse(response));
+        ctx.channel().writeAndFlush(new ch.inverseintegral.fakemc.server.packets.status.StatusResponse(response));
         this.currentState = ProtocolState.PING;
     }
 
