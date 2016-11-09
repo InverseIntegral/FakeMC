@@ -1,6 +1,6 @@
 package ch.inverseintegral.fakemc.server;
 
-import ch.inverseintegral.fakemc.server.config.ConfigurationValues;
+import ch.inverseintegral.fakemc.config.ConfigurationValues;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;

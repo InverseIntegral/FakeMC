@@ -1,7 +1,7 @@
 package ch.inverseintegral.fakemc.server.handlers;
 
+import ch.inverseintegral.fakemc.config.ConfigurationValues;
 import ch.inverseintegral.fakemc.server.Protocol;
-import ch.inverseintegral.fakemc.server.config.ConfigurationValues;
 import ch.inverseintegral.fakemc.server.packets.Packet;
 import ch.inverseintegral.fakemc.server.packets.handshake.Handshake;
 import ch.inverseintegral.fakemc.server.packets.login.Kick;

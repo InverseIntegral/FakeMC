@@ -19,6 +19,7 @@
     <modules>
         <module>server</module>
         <module>web</module>
+        <module>base</module>
     </modules>
 
     <properties>
@@ -35,6 +36,26 @@
         </developer>
     </developers>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>ch.inverseintegral.fakemc</groupId>
+                <artifactId>fakemc-server</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.inverseintegral.fakemc</groupId>
+                <artifactId>fakemc-web</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.inverseintegral.fakemc</groupId>
+                <artifactId>fakemc-base</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <!-- Spring -->
         <dependency>
@@ -49,7 +70,6 @@
             <version>1.14.8</version>
             <scope>provided</scope>
         </dependency>
-
 
         <!-- Logging -->
         <dependency>

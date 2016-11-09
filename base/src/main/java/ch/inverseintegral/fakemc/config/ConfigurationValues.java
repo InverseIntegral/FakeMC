@@ -1,4 +1,4 @@
-package ch.inverseintegral.fakemc.server.config;
+package ch.inverseintegral.fakemc.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

@@ -1,6 +1,6 @@
 package ch.inverseintegral.fakemc.server;
 
-import ch.inverseintegral.fakemc.server.config.ConfigurationValues;
+import ch.inverseintegral.fakemc.config.ConfigurationValues;
 import ch.inverseintegral.fakemc.server.handlers.MinecraftHandler;
 import ch.inverseintegral.fakemc.server.handlers.PacketHandler;
 import ch.inverseintegral.fakemc.server.handlers.Varint21FrameDecoder;

@@ -1,5 +1,6 @@
 package ch.inverseintegral.fakemc.server.config;
 
+import ch.inverseintegral.fakemc.config.ConfigurationValues;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
