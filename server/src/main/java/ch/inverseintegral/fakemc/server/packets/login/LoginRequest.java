@@ -2,7 +2,6 @@ package ch.inverseintegral.fakemc.server.packets.login;
 
 import ch.inverseintegral.fakemc.server.packets.Packet;
 import io.netty.buffer.ByteBuf;
-import lombok.Data;
 
 /**
  * This request is sent when joining a server.
@@ -11,7 +10,6 @@ import lombok.Data;
  * @version 1.0
  * @since 1.0
  */
-@Data
 public class LoginRequest extends Packet {
 
     /**
@@ -22,7 +20,11 @@ public class LoginRequest extends Packet {
     /**
      * Reflection constructor
      */
-    public LoginRequest() {}
+    private LoginRequest() {}
+
+    public String getData() {
+        return data;
+    }
 
     /**
      * {@inheritDoc}

@@ -24,13 +24,14 @@
             <version>2.3.1</version>
         </dependency>
 
-        <dependency>
-            <groupId>ch.inverseintegral.fakemc</groupId>
-            <artifactId>fakemc-web</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>ch.inverseintegral.fakemc</groupId>
             <artifactId>fakemc-base</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ch.inverseintegral.fakemc</groupId>
+            <artifactId>fakemc-web</artifactId>
         </dependency>
     </dependencies>
 

@@ -2,7 +2,6 @@ package ch.inverseintegral.fakemc.server.packets.status;
 
 import ch.inverseintegral.fakemc.server.packets.Packet;
 import io.netty.buffer.ByteBuf;
-import lombok.Data;
 
 /**
  * Response packet to the {@link StatusRequest status request}.
@@ -11,10 +10,17 @@ import lombok.Data;
  * @version 1.0
  * @since 1.0
  */
-@Data
 public class StatusResponse extends Packet {
 
-    private final String response;
+    private String response;
+
+    public StatusResponse(String response) {
+        this.response = response;
+    }
+
+    public String getResponse() {
+        return response;
+    }
 
     /**
      * {@inheritDoc}

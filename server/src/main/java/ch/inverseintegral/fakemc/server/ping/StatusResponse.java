@@ -1,7 +1,5 @@
 package ch.inverseintegral.fakemc.server.ping;
 
-import lombok.Data;
-
 /**
  * This class contains a status response that is sent
  * to a client using the {@link ch.inverseintegral.fakemc.server.packets.status.StatusResponse response packet}.
@@ -10,7 +8,7 @@ import lombok.Data;
  * @version 1.0
  * @since 1.0
  */
-@Data
+
 public class StatusResponse {
 
     /**
@@ -33,4 +31,10 @@ public class StatusResponse {
      */
     private final String favicon;
 
+    public StatusResponse(Chat description, Players players, Version version, String favicon) {
+        this.description = description;
+        this.players = players;
+        this.version = version;
+        this.favicon = favicon;
+    }
 }

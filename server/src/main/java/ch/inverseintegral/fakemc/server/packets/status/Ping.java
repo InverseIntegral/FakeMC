@@ -2,7 +2,6 @@ package ch.inverseintegral.fakemc.server.packets.status;
 
 import ch.inverseintegral.fakemc.server.packets.Packet;
 import io.netty.buffer.ByteBuf;
-import lombok.Data;
 
 /**
  * A ping packet that contains the request time or some random data.
@@ -11,7 +10,6 @@ import lombok.Data;
  * @version 1.0
  * @since 1.0
  */
-@Data
 public class Ping extends Packet {
 
     /**
@@ -23,7 +21,11 @@ public class Ping extends Packet {
     /**
      * Reflection constructor
      */
-    public Ping() {}
+    private Ping() {}
+
+    public long getTime() {
+        return time;
+    }
 
     /**
      * {@inheritDoc}

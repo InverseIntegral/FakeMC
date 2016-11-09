@@ -2,7 +2,6 @@ package ch.inverseintegral.fakemc.server.packets.handshake;
 
 import ch.inverseintegral.fakemc.server.packets.Packet;
 import io.netty.buffer.ByteBuf;
-import lombok.Data;
 
 /**
  * The initial packet a client sends.
@@ -12,7 +11,6 @@ import lombok.Data;
  * @version 1.0
  * @since 1.0
  */
-@Data
 public class Handshake extends Packet {
 
     private int protocolVersion;
@@ -23,8 +21,27 @@ public class Handshake extends Packet {
     /**
      * Reflection constructor
      */
-    public Handshake() {}
+    private Handshake() {}
 
+    public int getProtocolVersion() {
+        return protocolVersion;
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public int getRequestedProtocol() {
+        return requestedProtocol;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void read(ByteBuf buf) {
         this.protocolVersion = readVarInt(buf);
@@ -33,6 +50,9 @@ public class Handshake extends Packet {
         this.requestedProtocol = readVarInt(buf);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void write(ByteBuf buf) {
         throw new UnsupportedOperationException("Cant write handshake");

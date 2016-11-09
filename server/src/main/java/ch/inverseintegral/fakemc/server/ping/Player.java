@@ -1,7 +1,5 @@
 package ch.inverseintegral.fakemc.server.ping;
 
-import lombok.Data;
-
 /**
  * Represents a specific player.
  *
@@ -10,7 +8,6 @@ import lombok.Data;
  * @since 1.0
  * @see Players
  */
-@Data
 public class Player {
 
     /**
@@ -23,5 +20,11 @@ public class Player {
      * Can be a random uuid.
      */
     private final String id;
+
+    public Player(String name, String id) {
+        this.name = name;
+        this.id = id;
+    }
+
 
 }

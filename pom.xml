@@ -23,10 +23,12 @@
     </modules>
 
     <properties>
+        <start-class>ch.inverseintegral.fakemc.Application</start-class>
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
-        <start-class>ch.inverseintegral.fakemc.Application</start-class>
+        <logback-core.version>1.1.7</logback-core.version>
     </properties>
 
     <developers>
@@ -40,17 +42,12 @@
         <dependencies>
             <dependency>
                 <groupId>ch.inverseintegral.fakemc</groupId>
-                <artifactId>fakemc-server</artifactId>
+                <artifactId>fakemc-base</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>ch.inverseintegral.fakemc</groupId>
                 <artifactId>fakemc-web</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ch.inverseintegral.fakemc</groupId>
-                <artifactId>fakemc-base</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
@@ -63,14 +60,6 @@
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
 
-        <!-- Lombok -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.14.8</version>
-            <scope>provided</scope>
-        </dependency>
-
         <!-- Logging -->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -80,20 +69,21 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
-            <version>1.1.7</version>
+            <version>${logback-core.version}</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.1.7</version>
+            <version>${logback-core.version}</version>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.6.0</version>
             </plugin>
         </plugins>
     </build>

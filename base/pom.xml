@@ -7,8 +7,8 @@
     <artifactId>fakemc-base</artifactId>
 
     <parent>
-        <artifactId>fakemc</artifactId>
         <groupId>ch.inverseintegral.fakemc</groupId>
+        <artifactId>fakemc</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 

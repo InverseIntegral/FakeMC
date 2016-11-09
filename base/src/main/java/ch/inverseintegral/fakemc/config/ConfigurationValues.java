@@ -1,6 +1,5 @@
 package ch.inverseintegral.fakemc.config;
 
-import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Component;
  * @version 1.0
  * @since 1.0
  */
-@Data
 @Component
 @ConfigurationProperties
 public class ConfigurationValues {
@@ -23,4 +21,27 @@ public class ConfigurationValues {
     private int port;
     private String favicon;
 
+    public int getCurrentPlayers() {
+        return currentPlayers;
+    }
+
+    public int getMaxPlayers() {
+        return maxPlayers;
+    }
+
+    public String getMotd() {
+        return motd;
+    }
+
+    public String getKickMessage() {
+        return kickMessage;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public String getFavicon() {
+        return favicon;
+    }
 }

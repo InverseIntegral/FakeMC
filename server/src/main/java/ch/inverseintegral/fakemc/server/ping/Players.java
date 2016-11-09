@@ -1,7 +1,5 @@
 package ch.inverseintegral.fakemc.server.ping;
 
-import lombok.Data;
-
 import java.util.Collections;
 import java.util.List;
 
@@ -13,7 +11,6 @@ import java.util.List;
  * @since 1.0
  * @see StatusResponse
  */
-@Data
 public class Players {
 
     /**
@@ -37,4 +34,5 @@ public class Players {
         this.online = online;
         this.sample = Collections.emptyList();
     }
+
 }

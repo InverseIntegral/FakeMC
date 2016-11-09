@@ -1,7 +1,5 @@
 package ch.inverseintegral.fakemc.server.ping;
 
-import lombok.Data;
-
 /**
  * Represents the protocol and server version.
  *
@@ -10,11 +8,15 @@ import lombok.Data;
  * @since 1.0
  * @see StatusResponse
  */
-@Data
 public class Version {
 
     private final String name;
     private final int protocol;
+
+    private Version(String name, int protocol) {
+        this.name = name;
+        this.protocol = protocol;
+    }
 
     public static final Version V_1_8 = new Version("1.8", 47);
 

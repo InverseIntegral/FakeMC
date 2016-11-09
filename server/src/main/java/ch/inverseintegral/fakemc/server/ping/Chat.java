@@ -1,7 +1,5 @@
 package ch.inverseintegral.fakemc.server.ping;
 
-import lombok.Data;
-
 /**
  * This object represents a chat message.
  * Normally multiple formatting possibilities would be available here.
@@ -12,7 +10,6 @@ import lombok.Data;
  * @see ch.inverseintegral.fakemc.server.packets.login.Kick
  * @see StatusResponse
  */
-@Data
 public class Chat {
 
     /**
@@ -20,5 +17,9 @@ public class Chat {
      * This can include minecraft formatting codes.
      */
     private final String text;
+
+    public Chat(String text) {
+        this.text = text;
+    }
 
 }

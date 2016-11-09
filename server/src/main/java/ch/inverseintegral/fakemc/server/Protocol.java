@@ -1,6 +1,6 @@
 package ch.inverseintegral.fakemc.server;
 
-import ch.inverseintegral.fakemc.server.packets.*;
+import ch.inverseintegral.fakemc.server.packets.Packet;
 import ch.inverseintegral.fakemc.server.packets.handshake.Handshake;
 import ch.inverseintegral.fakemc.server.packets.login.Kick;
 import ch.inverseintegral.fakemc.server.packets.login.LoginRequest;
