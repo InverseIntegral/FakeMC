@@ -20,7 +20,7 @@ public class Kick extends Packet {
     /**
      * Reflection constructor
      */
-    private Kick() {}
+    public Kick() {}
 
     public Kick(String message) {
         this.message = message;

@@ -12,7 +12,7 @@ import io.netty.buffer.ByteBuf;
  */
 public class StatusRequest extends Packet {
 
-    private StatusRequest() {}
+    public StatusRequest() {}
 
     /**
      * {@inheritDoc}

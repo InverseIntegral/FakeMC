@@ -21,7 +21,7 @@ public class Ping extends Packet {
     /**
      * Reflection constructor
      */
-    private Ping() {}
+    public Ping() {}
 
     public long getTime() {
         return time;

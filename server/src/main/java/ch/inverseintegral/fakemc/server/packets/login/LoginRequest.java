@@ -20,7 +20,7 @@ public class LoginRequest extends Packet {
     /**
      * Reflection constructor
      */
-    private LoginRequest() {}
+    public LoginRequest() {}
 
     public String getData() {
         return data;

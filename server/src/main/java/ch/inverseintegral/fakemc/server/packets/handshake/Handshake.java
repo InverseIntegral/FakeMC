@@ -21,7 +21,7 @@ public class Handshake extends Packet {
     /**
      * Reflection constructor
      */
-    private Handshake() {}
+    public Handshake() {}
 
     public int getProtocolVersion() {
         return protocolVersion;

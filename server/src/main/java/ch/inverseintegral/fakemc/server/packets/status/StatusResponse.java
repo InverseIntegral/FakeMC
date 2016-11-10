@@ -12,7 +12,7 @@ import io.netty.buffer.ByteBuf;
  */
 public class StatusResponse extends Packet {
 
-    private String response;
+    public String response;
 
     public StatusResponse(String response) {
         this.response = response;

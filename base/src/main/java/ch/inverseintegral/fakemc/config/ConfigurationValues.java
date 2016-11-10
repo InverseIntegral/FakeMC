@@ -25,23 +25,48 @@ public class ConfigurationValues {
         return currentPlayers;
     }
 
+    public void setCurrentPlayers(int currentPlayers) {
+        this.currentPlayers = currentPlayers;
+    }
+
     public int getMaxPlayers() {
         return maxPlayers;
+    }
+
+    public void setMaxPlayers(int maxPlayers) {
+        this.maxPlayers = maxPlayers;
     }
 
     public String getMotd() {
         return motd;
     }
 
+    public void setMotd(String motd) {
+        this.motd = motd;
+    }
+
     public String getKickMessage() {
         return kickMessage;
+    }
+
+    public void setKickMessage(String kickMessage) {
+        this.kickMessage = kickMessage;
     }
 
     public int getPort() {
         return port;
     }
 
+    public void setPort(int port) {
+        this.port = port;
+    }
+
     public String getFavicon() {
         return favicon;
     }
+
+    public void setFavicon(String favicon) {
+        this.favicon = favicon;
+    }
+
 }
