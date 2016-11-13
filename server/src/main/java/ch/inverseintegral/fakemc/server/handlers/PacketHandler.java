@@ -2,8 +2,8 @@ package ch.inverseintegral.fakemc.server.handlers;
 
 import ch.inverseintegral.fakemc.config.ConfigurationValues;
 import ch.inverseintegral.fakemc.server.Protocol;
+import ch.inverseintegral.fakemc.server.ServerStatistics;
 import ch.inverseintegral.fakemc.server.packets.Packet;
-import ch.inverseintegral.fakemc.server.packets.handshake.Handshake;
 import ch.inverseintegral.fakemc.server.packets.login.Kick;
 import ch.inverseintegral.fakemc.server.packets.login.LoginRequest;
 import ch.inverseintegral.fakemc.server.packets.status.Ping;
@@ -41,14 +41,16 @@ public class PacketHandler extends SimpleChannelInboundHandler<Packet> {
 
     private final String response;
     private final String kickMessage;
+    private final ServerStatistics serverStatistics;
 
-    public PacketHandler(ConfigurationValues configurationValues, String favicon) {
+    public PacketHandler(ConfigurationValues configurationValues, String favicon, ServerStatistics serverStatistics) {
         Gson gson = new Gson();
         Players players = new Players(configurationValues.getMaxPlayers(), configurationValues.getCurrentPlayers());
         Chat chat = new Chat(configurationValues.getMotd());
 
         this.response = gson.toJson(new StatusResponse(chat, players, Version.V_1_8, favicon));
         this.kickMessage = configurationValues.getKickMessage();
+        this.serverStatistics = serverStatistics;
     }
 
     @Override
@@ -63,8 +65,10 @@ public class PacketHandler extends SimpleChannelInboundHandler<Packet> {
         ctx.channel().close();
     }
 
-    protected void handle(ChannelHandlerContext ctx, Handshake handshake) {
+    protected void handle(ChannelHandlerContext ctx, ch.inverseintegral.fakemc.server.packets.handshake.Handshake handshake) {
         this.checkState(ProtocolState.HANDSHAKE);
+
+        serverStatistics.addHandshake(handshake.getHost(), handshake.getPort(), handshake.getProtocolVersion());
 
         switch (handshake.getRequestedProtocol()) {
             case 1:

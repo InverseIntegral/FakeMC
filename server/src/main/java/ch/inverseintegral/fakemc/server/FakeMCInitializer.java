@@ -31,6 +31,9 @@ class FakeMCInitializer extends ChannelInitializer<SocketChannel> {
     @Autowired
     private String favicon;
 
+    @Autowired
+    private ServerStatistics serverStatistics;
+
     /**
      * {@inheritDoc}
      */
@@ -39,7 +42,7 @@ class FakeMCInitializer extends ChannelInitializer<SocketChannel> {
         socketChannel.pipeline().addLast(new Varint21FrameDecoder(),
                 fieldPrepender,
                 new MinecraftHandler(),
-                new PacketHandler(configurationValues, favicon));
+                new PacketHandler(configurationValues, favicon, serverStatistics));
 
     }
 
