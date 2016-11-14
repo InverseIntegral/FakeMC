@@ -3,6 +3,8 @@ package ch.inverseintegral.fakemc.config;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * Holds the configured server values.
  *
@@ -14,26 +16,34 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties
 public class ConfigurationValues {
 
-    private int currentPlayers;
-    private int maxPlayers;
+    @NotNull
+    private Integer currentPlayers;
+
+    @NotNull
+    private Integer maxPlayers;
+
+    @NotNull
     private String motd;
+
+    @NotNull
     private String kickMessage;
-    private int port;
+
+    private Integer port;
     private String favicon;
 
-    public int getCurrentPlayers() {
+    public Integer getCurrentPlayers() {
         return currentPlayers;
     }
 
-    public void setCurrentPlayers(int currentPlayers) {
+    public void setCurrentPlayers(Integer currentPlayers) {
         this.currentPlayers = currentPlayers;
     }
 
-    public int getMaxPlayers() {
+    public Integer getMaxPlayers() {
         return maxPlayers;
     }
 
-    public void setMaxPlayers(int maxPlayers) {
+    public void setMaxPlayers(Integer maxPlayers) {
         this.maxPlayers = maxPlayers;
     }
 
@@ -53,11 +63,11 @@ public class ConfigurationValues {
         this.kickMessage = kickMessage;
     }
 
-    public int getPort() {
+    public Integer getPort() {
         return port;
     }
 
-    public void setPort(int port) {
+    public void setPort(Integer port) {
         this.port = port;
     }
 

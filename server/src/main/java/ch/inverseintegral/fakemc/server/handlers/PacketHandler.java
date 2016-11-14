@@ -39,17 +39,15 @@ public class PacketHandler extends SimpleChannelInboundHandler<Packet> {
      */
     private ProtocolState currentState = ProtocolState.HANDSHAKE;
 
-    private final String response;
-    private final String kickMessage;
+    private static final Gson gson = new Gson();
+
+    private final String favicon;
     private final ServerStatistics serverStatistics;
+    private final ConfigurationValues configurationValues;
 
     public PacketHandler(ConfigurationValues configurationValues, String favicon, ServerStatistics serverStatistics) {
-        Gson gson = new Gson();
-        Players players = new Players(configurationValues.getMaxPlayers(), configurationValues.getCurrentPlayers());
-        Chat chat = new Chat(configurationValues.getMotd());
-
-        this.response = gson.toJson(new StatusResponse(chat, players, Version.V_1_8, favicon));
-        this.kickMessage = configurationValues.getKickMessage();
+        this.favicon = favicon;
+        this.configurationValues = configurationValues;
         this.serverStatistics = serverStatistics;
     }
 
@@ -85,7 +83,7 @@ public class PacketHandler extends SimpleChannelInboundHandler<Packet> {
     protected void handle(ChannelHandlerContext ctx, StatusRequest statusRequest) {
         this.checkState(ProtocolState.STATUS);
 
-        ctx.channel().writeAndFlush(new ch.inverseintegral.fakemc.server.packets.status.StatusResponse(response));
+        ctx.channel().writeAndFlush(getResponse());
         this.currentState = ProtocolState.PING;
     }
 
@@ -100,10 +98,23 @@ public class PacketHandler extends SimpleChannelInboundHandler<Packet> {
         this.checkState(ProtocolState.USERNAME);
         logger.info("The player {} tried to join the server", loginRequest.getData());
 
-        Kick kick = new Kick(getKickData(this.kickMessage));
+        Kick kick = new Kick(getKickData());
         ctx.channel()
                 .writeAndFlush(kick)
                 .addListener(ChannelFutureListener.CLOSE);
+    }
+
+    /**
+     * Gets the status response json string from the current configuration and
+     * encapsulates it in the {@link ch.inverseintegral.fakemc.server.packets.status.StatusResponse status response}.
+     *
+     * @return  The status response object constructed from the configuration values.
+     */
+    private ch.inverseintegral.fakemc.server.packets.status.StatusResponse getResponse() {
+        Players players = new Players(configurationValues.getMaxPlayers(), configurationValues.getCurrentPlayers());
+        Chat chat = new Chat(configurationValues.getMotd());
+
+        return new ch.inverseintegral.fakemc.server.packets.status.StatusResponse(gson.toJson(new StatusResponse(chat, players, Version.V_1_8, favicon)));
     }
 
     /**
@@ -119,14 +130,11 @@ public class PacketHandler extends SimpleChannelInboundHandler<Packet> {
     }
 
     /**
-     * Gets some kick data.
-     * @param kickMessage   The kick message that should show up
-     *                      when the player connects to the server.
-     * @return              Returns the json string of the kick data.
+     * Gets the kick message in json format.
+     * @return  Returns the json string of the kick data.
      */
-    private String getKickData(String kickMessage) {
-        Gson gson = new Gson();
-        return gson.toJson(new Chat(kickMessage));
+    private String getKickData() {
+        return gson.toJson(new Chat(configurationValues.getKickMessage()));
     }
 
     /**
