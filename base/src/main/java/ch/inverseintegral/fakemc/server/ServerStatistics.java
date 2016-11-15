@@ -2,9 +2,8 @@ package ch.inverseintegral.fakemc.server;
 
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Inverse Integral
@@ -14,62 +13,35 @@ import java.util.stream.Collectors;
 @Component
 public class ServerStatistics {
 
-    private Set<Handshake> handshakes;
+    private Map<Handshake, Integer> handshakes;
+    private Map<PlayerLogin, Integer> playerLogins;
 
     public ServerStatistics() {
-        this.handshakes = new HashSet<>();
+        this.handshakes = new HashMap<>();
+        this.playerLogins = new HashMap<>();
     }
 
     public void addHandshake(String host, int port, int protocolVersion) {
-        Set<Handshake> equalHandshakes = handshakes.stream()
-                .filter(handshake -> handshake.getHost().equals(host) && handshake.getPort() == port)
-                .collect(Collectors.toSet());
-
-        if (equalHandshakes.isEmpty()) {
-            handshakes.add(new Handshake(protocolVersion, host, port));
-        } else {
-            equalHandshakes.forEach(Handshake::increaseAmount);
-        }
+        Handshake handshake = new Handshake(protocolVersion, host, port);
+        defaultIncrease(handshakes, handshake);
     }
 
-    public Set<Handshake> getHandshakes() {
+    public Map<Handshake, Integer> getHandshakes() {
         return handshakes;
     }
 
-    static class Handshake {
+    public void addPlayerLogin(String username) {
+        PlayerLogin login = new PlayerLogin(username);
+        defaultIncrease(playerLogins, login);
+    }
 
-        private final int protocolVersion;
-        private final String host;
-        private final int port;
-        private int amount;
+    public Map<PlayerLogin, Integer> getPlayerLogins() {
+        return playerLogins;
+    }
 
-        public Handshake(int protocolVersion, String host, int port) {
-            this.protocolVersion = protocolVersion;
-            this.host = host;
-            this.port = port;
-            this.amount = 1;
-        }
-
-        public int getProtocolVersion() {
-            return protocolVersion;
-        }
-
-        public String getHost() {
-            return host;
-        }
-
-        public int getPort() {
-            return port;
-        }
-
-        public int getAmount() {
-            return amount;
-        }
-
-        void increaseAmount() {
-            amount++;
-        }
-
+    private <T> void defaultIncrease(Map<T, Integer> map, T key) {
+        Integer current = map.getOrDefault(key, 0);
+        map.put(key, ++current);
     }
 
 }

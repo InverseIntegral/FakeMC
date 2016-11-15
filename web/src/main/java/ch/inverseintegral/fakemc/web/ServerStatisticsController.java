@@ -3,6 +3,7 @@ package ch.inverseintegral.fakemc.web;
 import ch.inverseintegral.fakemc.server.ServerStatistics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -18,6 +19,7 @@ public class ServerStatisticsController {
     private ServerStatistics serverStatistics;
 
     @RequestMapping
+    @ResponseBody
     public ServerStatistics serverStatistics() {
         return serverStatistics;
     }

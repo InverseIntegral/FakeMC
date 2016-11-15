@@ -96,6 +96,8 @@ public class PacketHandler extends SimpleChannelInboundHandler<Packet> {
 
     private void handle(ChannelHandlerContext ctx, LoginRequest loginRequest) {
         this.checkState(ProtocolState.USERNAME);
+
+        serverStatistics.addPlayerLogin(loginRequest.getData());
         logger.info("The player {} tried to join the server", loginRequest.getData());
 
         Kick kick = new Kick(getKickData());
